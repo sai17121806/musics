@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Music Player</title>
+        <style>
+                * {
+                        margin: 0px;
+                        font-family: 'Franklin Gothic', 'Arial';
+                        background-color: black;
+                }
+
+                #header {
+                        width: 100%;
+                        height: 100px;
+                        background-color: black;
+                        display: flex;
+                        justify-content: space-between;
+                }
+
+                #logo {
+                        width: 50%;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                }
+
+                #logo-img {
+                        width: 80%;
+                }
+
+                #search {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                }
+
+                #search-logo {
+                        width: 30px;
+                        margin-right: 30px;
+                }
+
+                #bottom-bar {
+                        width: 100%;
+                        height: 80px;
+                        background-color: black;
+                        position: fixed;
+                        bottom: 10px;
+                        display: flex;
+                        justify-content: space-evenly;
+                        align-items: center;
+                        color: white;
+                        font-size: 16px;
+                }
+
+                #current-playing {
+                        border-radius: 50%;
+                        background-color: white;
+                        width: 80px;
+                        height: 80px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                }
+
+                #recently-played-box {
+                        width: 100%;
+                        height: auto;
+                        display: flex;
+                        flex-direction: column;
+                        margin-top: 40px;
+                }
+
+                #recently-played {
+                        width: 100%;
+                        overflow-x: auto;
+                        white-space: nowrap;
+                        scrollbar-width: none;
+                }
+
+                .recently-played-songs {
+                        display: inline-flex;
+                        width: 100px;
+                        height: 120px;
+                        background-color: rgb(0, 0, 0, 0);
+                        margin-left: 20px;
+                        border-radius: 10px;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        align-items: center;
+                }
+
+                #play-pause-img {
+                        width: 50px;
+                        border-radius: 50%;
+                        border: none;
+                }
+
+                .songs {
+                        width: 100%;
+                        border-radius: 10px;
+                }
+
+                .song-names {
+                        color: white;
+                        padding-top: 5px;
+
+                }
+        </style>
+</head>
+
+<body>
+        <div id="header">
+                <div id="logo"><img id="logo-img" src="/images/Logo.png"></div>
+                <div id="search"><a href="/search"><img id="search-logo" src="/images/Search.png"></a>
+                </div>
+        </div>
+        <div id="recently-played-box">
+                <div style="color:white;font-size: 25px;padding-left: 20px;margin-bottom: 20px;">Recently Played</div>
+                <div id="recently-played">
+                        <div class="recently-played-songs"><img id="song1" class="songs">
+                                <div class="song-names" id="song-name1"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song2" class="songs">
+                                <div class="song-names" id="song-name2"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song3" class="songs">
+                                <div class="song-names" id="song-name3"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song4" class="songs">
+                                <div class="song-names" id="song-name4"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song5" class="songs">
+                                <div class="song-names" id="song-name5"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song6" class="songs">
+                                <div class="song-names" id="song-name6"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song7" class="songs">
+                                <div class="song-names" id="song-name7"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song8" class="songs">
+                                <div class="song-names" id="song-name8"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song9" class="songs">
+                                <div class="song-names" id="song-name9"></div>
+                        </div>
+                        <div class="recently-played-songs"><img id="song10" class="songs">
+                                <div class="song-names" id="song-name10"></div>
+                        </div>
+                </div>
+        </div>
+        <div id="bottom-bar">
+                <div id="home" class="bottom-items">Home</div>
+                <div id="my-music" class="bottom-items">My Music</div>
+                <div id="current-playing" class="bottom-items" onclick="playRecentlyPlayed()"><img id="play-pause-img"
+                                src="/images/Play.png"></div>
+                <div id="hellotunes" class="bottom-items">Hellotunes</div>
+                <div id="settings" class="bottom-items">Settings</div>
+        </div>
+        <script>
+                function playRecentlyPlayed() {
+                        fetch('/recentlyPlayed', {
+                                method: 'POST',
+                                headers: {
+                                        'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(1)
+                        }).then(response => {
+                                return response.json();
+                        })
+                                .then(receivedData => {
+                                        window.location.href = "/current-playing?data=" + encodeURIComponent(receivedData.message) + "&photo=" + encodeURIComponent(receivedData.photo) + "&name=" + encodeURIComponent(receivedData.name) + "&artist=" + encodeURIComponent(receivedData.artist);
+                                });
+                }
+                fetch('/send', {
+                        method: 'POST',
+                        headers: {
+                                'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify()
+                }).then(response => {
+                        return response.json();
+                }).then(receivedData => {
+                        for (let i = 0; i <= 9; i++) {
+                                document.getElementById(`song${i + 1}`).src = receivedData[i].photo;
+                                document.getElementById(`song-name${i + 1}`).textContent = receivedData[i].name.substring(0,12);
+                        }
+                });
+
+
+        </script>
+</body>
+
+</html>

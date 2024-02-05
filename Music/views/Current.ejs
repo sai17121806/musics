@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Music Player</title>
+        <style>
+                * {
+                        margin: 0px;
+                        font-family: 'Franklin Gothic', 'Arial';
+                }
+
+                body {
+                        background-color: black;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-evenly;
+                        height: 100vh;
+                }
+
+                #header {
+                        width: 100%;
+                        height: 100px;
+                        display: flex;
+                        justify-content: space-between;
+                        z-index: 1;
+                        mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+                }
+
+                #side-arrow {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                }
+
+                #side-arrow-logo {
+                        width: 30px;
+                        margin-left: 20px;
+                        transform: rotate(90deg);
+                }
+
+                #logo {
+                        width: 50%;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                }
+
+                #logo-img {
+                        width: 80%;
+                }
+
+                #search {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                }
+
+                #search-logo {
+                        width: 30px;
+                        margin-right: 30px;
+                }
+
+                #song {
+                        width: 100%;
+                        height: 510px;
+                        background-color: black;
+                }
+
+                #song-img {
+                        width: 100%;
+                        height: 510px;
+                }
+
+                #bottom-bar {
+                        width: 100%;
+                        height: 80px;
+                        background-color: black;
+                        margin-bottom: 10px;
+                        display: flex;
+                        justify-content: space-evenly;
+                        align-items: center;
+                        color: white;
+                        font-size: 16px;
+                }
+
+                #current-playing {
+                        border-radius: 50%;
+                        background-color: white;
+                        width: 80px;
+                        height: 80px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                }
+
+                #play-pause-img {
+                        width: 50px;
+                        border-radius: 50%;
+                }
+
+                #about-song {
+                        width: 100%;
+                        height: 150px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-evenly;
+                }
+
+                #progress-bar {
+                        width: 0%;
+                        height: 5px;
+                        background-color: aliceblue;
+                        border-radius: 50px;
+                }
+
+                #song-metadata {
+                        display: flex;
+                        flex-direction: column;
+                        margin-left: 30px;
+                        color: azure;
+                }
+
+                #song-name {
+                        font-size: 30px;
+                }
+
+                #song-movie {
+                        margin-top: 5px;
+                        font-size: 20px;
+                }
+
+                a {
+                        color: inherit;
+                        text-decoration: none;
+                }
+        </style>
+</head>
+
+<body>
+        <div id="header">
+                <a id="side-arrow" href="/"><img id="side-arrow-logo" src="/images/Dropdown.png"></a>
+                <div id="logo"><img id="logo-img" src="/images/Logo.png"></div>
+                <a id="search" href="/search"><img id="search-logo" src="/images/Search.png"></a>
+        </div>
+        <div id="song"><img id="song-img">
+        </div>
+        <div id="about-song">
+                <div id="song-metadata">
+                        <div id="song-name"></div>
+                        <div id="song-movie"></div>
+                </div>
+                <div style="display: flex;justify-content:left;margin-left: 8%;">
+                        <div id="progress-bar">
+                                <audio id="audio">
+                                        <source type="audio/mp3">
+                                </audio>
+                        </div>
+                </div>
+        </div>
+        <div id="bottom-bar">
+                <a href="/home">
+                        <div id="home" class="bottom-items">Home</div>
+                </a>
+                <div id="my-music" class="bottom-items">My Music</div>
+                <div id="current-playing" class="bottom-items" onclick="playPause()"><img id="play-pause-img"
+                                src="/images/Play.png">
+                </div>
+                <div id="hellotunes" class="bottom-items">Hellotunes</div>
+                <div id="settings" class="bottom-items">Settings</div>
+        </div>
+        <script>
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                if (queryString) {
+                        const audio = document.getElementById("audio");
+                        const img = document.getElementById("song-img");
+                        audio.src = urlParams.get("data");
+                        img.src = urlParams.get("photo");
+                        document.getElementById("song-name").textContent = urlParams.get("name");
+                        document.getElementById("song-movie").textContent = urlParams.get("artist");
+                }
+                function playPause() {
+                        const playPause = document.getElementById("play-pause-img");
+                        const audio = document.getElementById("audio");
+                        if (audio.paused) {
+                                audio.play();
+                                playPause.src = "/images/Pause.png";
+                        }
+                        else {
+                                audio.pause();
+                                playPause.src = "/images/Play.png";
+                        }
+                }
+                const audio = document.getElementById("audio");
+                const progressBar = document.getElementById("progress-bar");
+                audio.addEventListener("timeupdate", () => {
+                        var progress = (audio.currentTime / audio.duration) * 90;
+                        progressBar.style.width = progress + "%";
+                })
+        </script>
+</body>
